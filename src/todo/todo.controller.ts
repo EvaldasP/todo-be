@@ -13,6 +13,8 @@ import { TodoService } from './services/todo.service';
 import { TodoDto } from './dtos/todo.dto';
 import { TodoStatusDto } from './dtos/todo-status.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { User } from 'src/user/entities/user.entity';
+import { GetUser } from 'src/shared/decorators/user.decorator';
 
 @Controller('todos')
 @UseGuards(AuthGuard())
@@ -20,33 +22,41 @@ export class TodoController {
   constructor(private readonly _todoService: TodoService) {}
 
   @Get()
-  async findAllTodos(): Promise<Todo[]> {
-    return this._todoService.findAllUserTodos({} as any);
+  async findAllTodos(@GetUser() user: User): Promise<Todo[]> {
+    return this._todoService.findAllUserTodos(user);
   }
 
   @Post()
-  async createTodo(@Body() createTodoDto: TodoDto): Promise<Todo> {
-    return this._todoService.createTodo(createTodoDto, {} as any);
+  async createTodo(
+    @GetUser() user: User,
+    @Body() createTodoDto: TodoDto,
+  ): Promise<Todo> {
+    return this._todoService.createTodo(createTodoDto, user);
   }
 
   @Patch(':id')
   async updateTodo(
+    @GetUser() user: User,
     @Param('id') id: string,
     @Body() todoDto: TodoDto,
   ): Promise<Todo> {
-    return this._todoService.updateTodo(id, {} as any, todoDto);
+    return this._todoService.updateTodo(id, user, todoDto);
   }
 
   @Patch(':id')
   async updateTodoStatus(
+    @GetUser() user: User,
     @Param('id') id: string,
     @Body() todoStatusDto: TodoStatusDto,
   ): Promise<Todo> {
-    return this._todoService.updateTodoStatus(id, {} as any, todoStatusDto);
+    return this._todoService.updateTodoStatus(id, user, todoStatusDto);
   }
 
   @Delete(':id')
-  async deleteTodo(@Param('id') id: string): Promise<string> {
-    return this._todoService.deleteTodo(id, {} as any);
+  async deleteTodo(
+    @GetUser() user: User,
+    @Param('id') id: string,
+  ): Promise<string> {
+    return this._todoService.deleteTodo(id, user);
   }
 }
