@@ -13,7 +13,7 @@ export class Todo {
   description: string;
 
   @Column({ default: false })
-  completed: boolean;
+  isCompleted: boolean;
 
   @ManyToOne(() => User, (user) => user.todos)
   user: User;
