@@ -9,7 +9,7 @@ import { AuthModule } from './auth/auth.module';
   imports: [
     TypeOrmModule.forRoot({
       type: 'sqlite',
-      database: 'todo-database.sqlite',
+      database: 'src/db/todo-database.sqlite',
       entities: [User, Todo],
       synchronize: true,
     }),

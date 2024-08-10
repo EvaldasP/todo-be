@@ -7,6 +7,7 @@ import {
   Patch,
   Delete,
   UseGuards,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { Todo } from './entities/todo.entity';
 import { TodoService } from './services/todo.service';
@@ -37,7 +38,7 @@ export class TodoController {
   @Patch(':id')
   async updateTodo(
     @GetUser() user: User,
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() todoDto: TodoDto,
   ): Promise<Todo> {
     return this._todoService.updateTodo(id, user, todoDto);
@@ -46,7 +47,7 @@ export class TodoController {
   @Patch(':id')
   async updateTodoStatus(
     @GetUser() user: User,
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() todoStatusDto: TodoStatusDto,
   ): Promise<Todo> {
     return this._todoService.updateTodoStatus(id, user, todoStatusDto);
@@ -55,8 +56,8 @@ export class TodoController {
   @Delete(':id')
   async deleteTodo(
     @GetUser() user: User,
-    @Param('id') id: string,
-  ): Promise<string> {
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<number> {
     return this._todoService.deleteTodo(id, user);
   }
 }

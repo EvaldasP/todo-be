@@ -17,17 +17,19 @@ export class TodoService {
     private readonly _todoRepository: Repository<Todo>,
   ) {}
 
-  public createTodo(todoDto: TodoDto, user: User): Promise<Todo> {
+  public async createTodo(todoDto: TodoDto, user: User): Promise<Todo> {
     const todo = this._todoRepository.create({
       ...todoDto,
       user,
     });
 
-    return this._todoRepository.save(todo);
+    const savedTodo = await this._todoRepository.save(todo);
+
+    return this.findTodo(savedTodo?.id, user);
   }
 
   public async updateTodo(
-    id: string,
+    id: number,
     user: User,
     todoDto: TodoDto,
   ): Promise<Todo> {
@@ -35,7 +37,7 @@ export class TodoService {
   }
 
   public async updateTodoStatus(
-    id: string,
+    id: number,
     user: User,
     todoStatusDto: TodoStatusDto,
   ): Promise<Todo> {
@@ -46,7 +48,7 @@ export class TodoService {
     return this._todoRepository.find({ where: { user } });
   }
 
-  public async deleteTodo(id: string, user: User): Promise<string> {
+  public async deleteTodo(id: number, user: User): Promise<number> {
     const result = await this._todoRepository.delete({
       id: Number(id),
       user,
@@ -59,9 +61,9 @@ export class TodoService {
     return id;
   }
 
-  private async findTodo(id: string, user: User): Promise<Todo> {
+  private async findTodo(id: number, user: User): Promise<Todo> {
     const todo = await this._todoRepository.findOne({
-      where: { id: Number(id), user },
+      where: { id, user },
     });
 
     if (!todo) {
@@ -72,7 +74,7 @@ export class TodoService {
   }
 
   private async updateTodoFields(
-    id: string,
+    id: number,
     user: User,
     updateData: Partial<Todo>,
   ): Promise<Todo> {
