@@ -1,4 +1,3 @@
-// src/todos/todo.module.ts
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TodoController } from './todo.controller';
