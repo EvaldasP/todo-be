@@ -3,6 +3,7 @@ import { User } from 'src/user/entities/user.entity';
 import { UserService } from 'src/user/services/user.service';
 import { LoginDto } from '../dtos/login.dto';
 import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -26,12 +27,16 @@ export class AuthService {
     };
   }
 
-  private async validateUser(username: string, pass: string): Promise<User> {
+  private async validateUser(
+    username: string,
+    pass: string,
+  ): Promise<User | null> {
     const user = await this._userService.findOneByUsername(username);
 
-    if (user?.password === pass) {
+    if (user && (await bcrypt.compare(pass, user.password))) {
       return user;
     }
+
     return null;
   }
 }

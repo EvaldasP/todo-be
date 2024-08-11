@@ -47,7 +47,7 @@ export class TodoController {
     return this._todoService.updateTodo(id, user, todoDto);
   }
 
-  @Patch(':id')
+  @Patch('status/:id')
   updateTodoStatus(
     @GetUser() user: User,
     @Param('id', ParseIntPipe) id: number,
