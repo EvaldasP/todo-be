@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import { User } from 'src/user/entities/user.entity';
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 
@@ -12,6 +13,7 @@ export class Todo {
   @Column({ default: false })
   isCompleted: boolean;
 
+  @Exclude()
   @ManyToOne(() => User, (user) => user.todos)
   user: User;
 }

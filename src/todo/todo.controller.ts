@@ -8,6 +8,8 @@ import {
   Delete,
   UseGuards,
   ParseIntPipe,
+  ClassSerializerInterceptor,
+  UseInterceptors,
 } from '@nestjs/common';
 import { Todo } from './entities/todo.entity';
 import { TodoService } from './services/todo.service';
@@ -19,16 +21,17 @@ import { GetUser } from 'src/shared/decorators/user.decorator';
 
 @Controller('todos')
 @UseGuards(AuthGuard())
+@UseInterceptors(ClassSerializerInterceptor)
 export class TodoController {
   constructor(private readonly _todoService: TodoService) {}
 
   @Get()
-  async findAllTodos(@GetUser() user: User): Promise<Todo[]> {
+  findAllTodos(@GetUser() user: User): Promise<Todo[]> {
     return this._todoService.findAllUserTodos(user);
   }
 
   @Post()
-  async createTodo(
+  createTodo(
     @GetUser() user: User,
     @Body() createTodoDto: TodoDto,
   ): Promise<Todo> {
@@ -36,7 +39,7 @@ export class TodoController {
   }
 
   @Patch(':id')
-  async updateTodo(
+  updateTodo(
     @GetUser() user: User,
     @Param('id', ParseIntPipe) id: number,
     @Body() todoDto: TodoDto,
@@ -45,7 +48,7 @@ export class TodoController {
   }
 
   @Patch(':id')
-  async updateTodoStatus(
+  updateTodoStatus(
     @GetUser() user: User,
     @Param('id', ParseIntPipe) id: number,
     @Body() todoStatusDto: TodoStatusDto,
@@ -54,7 +57,7 @@ export class TodoController {
   }
 
   @Delete(':id')
-  async deleteTodo(
+  deleteTodo(
     @GetUser() user: User,
     @Param('id', ParseIntPipe) id: number,
   ): Promise<number> {

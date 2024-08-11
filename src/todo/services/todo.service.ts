@@ -17,31 +17,25 @@ export class TodoService {
     private readonly _todoRepository: Repository<Todo>,
   ) {}
 
-  public async createTodo(todoDto: TodoDto, user: User): Promise<Todo> {
+  public createTodo(todoDto: TodoDto, user: User): Promise<Todo> {
     const todo = this._todoRepository.create({
       ...todoDto,
       user,
     });
 
-    const savedTodo = await this._todoRepository.save(todo);
-
-    return this.findTodo(savedTodo?.id, user);
+    return this._todoRepository.save(todo);
   }
 
-  public async updateTodo(
-    id: number,
-    user: User,
-    todoDto: TodoDto,
-  ): Promise<Todo> {
+  public updateTodo(id: number, user: User, todoDto: TodoDto): Promise<Todo> {
     return this.updateTodoFields(id, user, todoDto);
   }
 
-  public async updateTodoStatus(
+  public updateTodoStatus(
     id: number,
     user: User,
     todoStatusDto: TodoStatusDto,
   ): Promise<Todo> {
-    return await this.updateTodoFields(id, user, todoStatusDto);
+    return this.updateTodoFields(id, user, todoStatusDto);
   }
 
   public findAllUserTodos(user: User): Promise<Todo[]> {
