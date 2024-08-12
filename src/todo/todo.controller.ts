@@ -18,7 +18,10 @@ import { TodoStatusDto } from './dtos/todo-status.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { User } from 'src/user/entities/user.entity';
 import { GetUser } from 'src/shared/decorators/user.decorator';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Todos')
+@ApiBearerAuth()
 @Controller('todos')
 @UseGuards(AuthGuard())
 @UseInterceptors(ClassSerializerInterceptor)
