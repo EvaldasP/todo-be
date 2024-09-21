@@ -9,6 +9,7 @@ import { AuthService } from './services/auth.service';
 import { LoginDto } from './dtos/login.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { UserService } from 'src/user/services/user.service';
+import { RegisterDto } from './dtos/register.dto';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -26,7 +27,7 @@ export class AuthController {
   }
 
   @Post('register')
-  async register(@Body() registerDto: any): Promise<string> {
+  async register(@Body() registerDto: RegisterDto): Promise<string> {
     return this._userService.createUser(registerDto);
   }
 }
